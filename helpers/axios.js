@@ -1,5 +1,5 @@
 import axios from "axios";
-import * as SecureStore from "expo-secure-store";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as RootNavigation from "../navigations/RootNavigator";
 import { decode as atob } from "base-64";
 const baseURL = "https://solemates-backend-drf.herokuapp.com/";
@@ -14,7 +14,7 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   async (config) => {
-    const tokenData = await SecureStore.getItemAsync("access_token");
+    const tokenData = await AsyncStorage.getItem("access_token");
     const token = JSON.parse(tokenData);
 
     if (token) {
@@ -59,7 +59,7 @@ axiosInstance.interceptors.response.use(
       error.response.data.code === "token_not_valid" &&
       error.response.status === 401
     ) {
-      const refreshTokenData = await SecureStore.getItemAsync("refresh_token");
+      const refreshTokenData = await AsyncStorage.getItem("refresh_token");
       const refreshToken = JSON.parse(refreshTokenData);
 
       if (refreshToken) {
@@ -76,7 +76,7 @@ axiosInstance.interceptors.response.use(
             .then(async (response) => {
               console.log("there is response", response.data.access);
 
-              await SecureStore.setItemAsync(
+              await AsyncStorage.setItem(
                 "access_token",
                 JSON.stringify(response.data.access)
               );
