@@ -11,7 +11,7 @@ import {
   Provider,
   Avatar,
 } from "react-native-paper";
-import * as SecureStore from "expo-secure-store";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AuthContext } from "../../context/authcontext/AuthContext.js";
 import Color from "../../assets/themes/Color.js";
 import * as RootNavigation from "../../navigations/RootNavigator.js";
@@ -55,8 +55,8 @@ const SettingScreen = () => {
       setTimeout(async () => {
         setUser("");
         await axiosInstance.delete("/auth/delete/");
-        await SecureStore.deleteItemAsync("access_token");
-        await SecureStore.deleteItemAsync("refresh_token");
+        await AsyncStorage.removeItem("access_token");
+        await AsyncStorage.removeItem("refresh_token");
       }, 4000);
     } catch (e) {
       console.log(e);

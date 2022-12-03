@@ -1,6 +1,6 @@
 import React, { useState, createContext } from "react";
 import jwt_decode from "jwt-decode";
-import * as SecureStore from "expo-secure-store";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import axiosInstance from "../../helpers/axios";
 import * as RootNavigation from "../../navigations/RootNavigator.js";
 import { Alert } from "react-native";
@@ -29,11 +29,11 @@ const AuthProvider = ({ children }) => {
         const data = response.data;
         const userId = jwt_decode(data.access)["user_id"];
         setIdForProfile(userId);
-        await SecureStore.setItemAsync(
+        await AsyncStorage.setItem(
           "access_token",
           JSON.stringify(data.access)
         );
-        await SecureStore.setItemAsync(
+        await AsyncStorage.setItem(
           "refresh_token",
           JSON.stringify(data.refresh)
         );
@@ -91,11 +91,11 @@ const AuthProvider = ({ children }) => {
         const userId = jwt_decode(data.access)["user_id"];
         setUser({ id: userId });
 
-        await SecureStore.setItemAsync(
+        await AsyncStorage.setItem(
           "access_token",
           JSON.stringify(data.access)
         );
-        await SecureStore.setItemAsync(
+        await AsyncStorage.setItem(
           "refresh_token",
           JSON.stringify(data.refresh)
         );
@@ -115,8 +115,8 @@ const AuthProvider = ({ children }) => {
   const signOutUser = async () => {
     try {
       setUser("");
-      await SecureStore.deleteItemAsync("access_token");
-      await SecureStore.deleteItemAsync("refresh_token");
+      await AsyncStorage.removeItem("access_token");
+      await AsyncStorage.removeItem("refresh_token");
       RootNavigation.navigate("AuthSelection", { tokenExpired: true });
     } catch (e) {
       alert("Something went wrong. Please try again!");
