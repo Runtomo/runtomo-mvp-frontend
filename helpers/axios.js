@@ -2,7 +2,7 @@ import axios from "axios";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as RootNavigation from "../navigations/RootNavigator";
 import { decode as atob } from "base-64";
-const baseURL = "https://solemates-backend-drf.herokuapp.com/";
+const baseURL = "https://runtomo-mvp-backend.herokuapp.com/";
 
 const axiosInstance = axios.create({
   baseURL: baseURL,
